@@ -1,15 +1,737 @@
 <!DOCTYPE html>
-<html lang="zh-hant">
+<html lang="zh-Hant" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>NMIXX</title>
+    <title>NMIXX - New Frontier of MIXX POP</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Syne (時尚前衛標題) & Plus Jakarta Sans & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nmixx: {
+                            white: '#FFFFFF',
+                            sky: '#70b3f5',
+                            skyLight: '#e6f3ff',
+                            skyDark: '#3b8cd9',
+                            ocean: '#1e3a8a',
+                            navy: '#0f172a',
+                            slate: '#334155',
+                            mist: '#f8fafc',
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Syne', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 精品自訂滾動條 */
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #93c5fd;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #60a5fa;
+        }
+        /* 天藍色漸層光暈氛圍 */
+        .sky-glow {
+            background: radial-gradient(circle at 50% 30%, rgba(112, 179, 245, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #0f172a 30%, #3b8cd9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sky-badge {
+            background: rgba(112, 179, 245, 0.12);
+            border: 1px solid rgba(112, 179, 245, 0.3);
+            color: #2563eb;
+        }
+    </style>
 </head>
-<body>
-    <h1>NICE TO MIXX YOU</h1>
-    <p>NMIXX 的核心概念圍繞著「MIXXPOP」音樂風格與獨特科幻奇幻世界觀</p>
-    <p id="倒數">距離NMIXX回歸還有 X 天</p>
-    <script src="script.js"></script>
+<body class="bg-nmixx-mist font-sans text-nmixx-slate antialiased selection:bg-nmixx-skyLight selection:text-nmixx-skyDark">
+
+    <!-- 1. 導航欄 (Sticky Navigation Bar) -->
+    <header id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-sky-100/60 py-4 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- 品牌 LOGO -->
+            <a href="#home" class="flex items-center gap-2 group">
+                <span class="font-display font-extrabold text-2xl tracking-widest text-nmixx-navy group-hover:text-nmixx-skyDark transition-colors">NMIXX</span>
+                <span class="inline-block w-2 h-2 rounded-full bg-nmixx-sky animate-ping"></span>
+            </a>
+
+            <!-- 桌面主選單 -->
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-8 text-sm font-medium">
+                <a href="#home" class="nav-item text-nmixx-slate hover:text-nmixx-skyDark px-3 py-1 transition-all">首頁 / HOME</a>
+                <a href="#members" class="nav-item text-nmixx-slate hover:text-nmixx-skyDark px-3 py-1 transition-all">成員介紹 / MEMBERS</a>
+                <a href="#discography" class="nav-item text-nmixx-slate hover:text-nmixx-skyDark px-3 py-1 transition-all">專輯介紹 / DISCOGRAPHY</a>
+                <a href="#worldtour" class="nav-item text-nmixx-slate hover:text-nmixx-skyDark px-3 py-1 transition-all">巡迴演唱 / TOUR</a>
+            </nav>
+
+            <!-- 粉絲社群 & 官方徽章 -->
+            <div class="hidden sm:flex items-center gap-4">
+                <span class="text-xs tracking-wider uppercase px-3 py-1 rounded-full sky-badge font-semibold">
+                    NSWER Fandom
+                </span>
+            </div>
+
+            <!-- 手機版選單按鈕 -->
+            <button id="menuBtn" class="md:hidden text-nmixx-navy hover:text-nmixx-skyDark p-2 focus:outline-none">
+                <i class="fa-solid fa-bars-staggered text-xl"></i>
+            </button>
+        </div>
+
+        <!-- 手機版展開選單 -->
+        <div id="mobileMenu" class="hidden md:hidden pt-4 pb-3 border-t border-slate-100 mt-3 space-y-2">
+            <a href="#home" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-nmixx-skyLight text-nmixx-slate">首頁</a>
+            <a href="#members" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-nmixx-skyLight text-nmixx-slate">成員介紹</a>
+            <a href="#discography" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-nmixx-skyLight text-nmixx-slate">專輯介紹</a>
+            <a href="#worldtour" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-nmixx-skyLight text-nmixx-slate">世巡介紹</a>
+        </div>
+    </header>
+
+    <!-- 2. 首頁 (Hero Section) -->
+    <section id="home" class="min-h-screen pt-28 pb-16 flex items-center relative overflow-hidden sky-glow">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- 文字敘述 -->
+            <div class="lg:col-span-6 space-y-6 text-center lg:text-left z-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white shadow-sm border border-sky-100 text-xs font-semibold text-nmixx-skyDark">
+                    <span class="w-1.5 h-1.5 rounded-full bg-nmixx-sky"></span>
+                    JYP Entertainment • 2022.02.22 Debut
+                </div>
+
+                <h1 class="text-5xl sm:text-6xl xl:text-7xl font-display font-extrabold text-nmixx-navy tracking-tight leading-none">
+                    NEW MIXX <br>
+                    <span class="text-gradient">NEW GENERATION</span>
+                </h1>
+
+                <p class="text-slate-600 max-w-lg mx-auto lg:mx-0 text-base sm:text-lg font-normal leading-relaxed">
+                    以全新音樂風格 <strong class="text-nmixx-navy font-semibold">MIXX POP</strong> 宣告新紀元的到來。NMIXX 由 Lily、Haewon、Sullyoon、Bae、Jiwoo、Kyujin 六位全員具備「全能 ACE」實力的成員組成，展現多變魅力的無界之聲。
+                </p>
+
+                <!-- 操作導引按鈕 -->
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                    <a href="#members" class="px-7 py-3.5 rounded-full bg-nmixx-navy text-white text-sm font-medium hover:bg-nmixx-skyDark hover:shadow-lg hover:shadow-sky-200 transition-all duration-300">
+                        認識成員 / MEMBERS
+                    </a>
+                    <a href="#discography" class="px-7 py-3.5 rounded-full bg-white text-nmixx-navy border border-slate-200 text-sm font-medium hover:border-nmixx-sky hover:text-nmixx-skyDark transition-all duration-300">
+                        探索音樂 / DISCOGRAPHY
+                    </a>
+                </div>
+
+                <!-- 關鍵字微指標 -->
+                <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-200/80 max-w-md mx-auto lg:mx-0 text-center lg:text-left">
+                    <div>
+                        <div class="font-display font-bold text-xl text-nmixx-navy">6</div>
+                        <div class="text-xs text-slate-400">All-Rounders</div>
+                    </div>
+                    <div>
+                        <div class="font-display font-bold text-xl text-nmixx-navy">MIXX POP</div>
+                        <div class="text-xs text-slate-400">Genre Fusion</div>
+                    </div>
+                    <div>
+                        <div class="font-display font-bold text-xl text-nmixx-navy">NSWER</div>
+                        <div class="text-xs text-slate-400">Official Fandom</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 團體形象圖展示 -->
+            <div class="lg:col-span-6 relative">
+                <div class="relative mx-auto max-w-lg lg:max-w-none">
+                    <!-- 裝飾藍白漸層底盤 -->
+                    <div class="absolute -inset-2 bg-gradient-to-r from-sky-200 to-sky-100 rounded-3xl blur-2xl opacity-60"></div>
+                    
+                    <!-- 團體照片容器 (附備用高質感占位) -->
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white group">
+                        <img 
+                            src="bg.jpg" 
+                            alt="NMIXX Group" 
+                            class="w-full h-[460px] object-cover transition-transform duration-700 group-hover:scale-105"
+                            onerror="this.src='https://placehold.co/900x700/ffffff/70b3f5?text=NMIXX+Official+Photo'"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
+                            <div class="text-white">
+                                <span class="text-xs uppercase tracking-widest text-sky-200 font-semibold">Special Visual</span>
+                                <h3 class="text-lg font-bold">NMIXX Visual Aesthetics</h3>
+                                <p class="text-xs text-white/80">代表純真與無限潛力的純白色與天藍色象徵</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 3. 成員介紹 (Members Section) -->
+    <section id="members" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs uppercase tracking-widest text-nmixx-skyDark font-bold">Profiles</span>
+                <h2 class="text-3xl sm:text-4xl font-display font-extrabold text-nmixx-navy mt-1">MEMBERS</h2>
+                <p class="text-slate-500 text-sm mt-3">全員皆為主唱、領舞與門面的六角形全能偶像團體</p>
+                
+                <!-- 成員專屬分類/定位篩選導覽 (Category Filter) -->
+                <div class="flex flex-wrap items-center justify-center gap-2 mt-8">
+                    <button class="member-filter-btn px-5 py-2 rounded-full text-xs font-semibold transition-all bg-nmixx-navy text-white shadow-sm" data-filter="all">全部成員 (All)</button>
+                    <button class="member-filter-btn px-5 py-2 rounded-full text-xs font-semibold transition-all bg-slate-100 text-slate-600 hover:bg-sky-50" data-filter="vocal">主唱線 (Vocal)</button>
+                    <button class="member-filter-btn px-5 py-2 rounded-full text-xs font-semibold transition-all bg-slate-100 text-slate-600 hover:bg-sky-50" data-filter="dance">舞蹈線 (Dance)</button>
+                    <button class="member-filter-btn px-5 py-2 rounded-full text-xs font-semibold transition-all bg-slate-100 text-slate-600 hover:bg-sky-50" data-filter="rap">饒舌線 (Rap)</button>
+                </div>
+            </div>
+
+            <!-- 成員卡片網格 -->
+            <div id="membersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 由下方 JavaScript 動態產生 6 位成員卡片 -->
+            </div>
+
+        </div>
+    </section>
+
+   <!-- 4. 專輯介紹 (Discography Section) -->
+    <section id="discography" class="py-24 bg-nmixx-mist relative">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-slate-200/80 pb-6 gap-6">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-nmixx-skyDark font-bold">Releases</span>
+                    <h2 class="text-3xl sm:text-4xl font-display font-extrabold text-nmixx-navy mt-1">DISCOGRAPHY</h2>
+                    <p class="text-slate-500 text-sm mt-2">混融多元曲風，締造專屬於 NMIXX 的 MIXX POP 宇宙</p>
+                </div>
+
+                <!-- 專輯分類標籤切換導覽 (Album Categories) -->
+                <div class="flex items-center gap-2 p-1.5 bg-white border border-slate-200 rounded-full shadow-sm self-start">
+                    <button class="album-filter-btn px-4 py-1.5 rounded-full text-xs font-medium bg-nmixx-skyDark text-white transition-all" data-type="all">全部發行</button>
+                    <button class="album-filter-btn px-4 py-1.5 rounded-full text-xs font-medium text-slate-600 hover:text-nmixx-navy transition-all" data-type="single">單曲專輯 (Single)</button>
+                    <button class="album-filter-btn px-4 py-1.5 rounded-full text-xs font-medium text-slate-600 hover:text-nmixx-navy transition-all" data-type="mini">迷你專輯 (EP)</button>
+                    <button class="album-filter-btn px-4 py-1.5 rounded-full text-xs font-medium text-slate-600 hover:text-nmixx-navy transition-all" data-type="full">正規專輯 (FULL ALBUM)</button>               
+                </div>
+            </div>
+
+            <!-- 專輯展示網格 -->
+            <div id="albumGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 由下方 JavaScript 動態填入 -->
+            </div>
+
+        </div>
+    </section>
+    <!-- 5. 世巡與展演介紹 (World Tour Section) -->
+    <section id="worldtour" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs uppercase tracking-widest text-nmixx-skyDark font-bold">Global Journey</span>
+                <h2 class="text-3xl sm:text-4xl font-display font-extrabold text-nmixx-navy mt-1">WORLD SHOWCASE & TOUR</h2>
+                <p class="text-slate-500 text-sm mt-3">跨越重洋與世界各地的 NSWER 零距離相遇的夢想舞台</p>
+            </div>
+
+            <!-- 世巡主題展示卡與場次列表 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- 左側：巡迴主題精選看板 -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-nmixx-navy text-white rounded-3xl p-8 relative overflow-hidden shadow-xl">
+                    <div class="absolute -right-8 -bottom-8 w-44 h-44 bg-nmixx-sky rounded-full blur-3xl opacity-30"></div>
+                    
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-sky-200">Showcase Tour</span>
+                    <h3 class="text-3xl font-display font-bold mt-4 leading-tight">NICE TO MIXX YOU & STICK OUT</h3>
+                    <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+                        從首爾出發，巡經北美洛杉磯、西雅圖以及亞洲曼谷、台北等多個城市，展現無與倫比的 Live 全開麥演唱震撼實力。
+                    </p>
+
+                    <div class="mt-8 space-y-4 border-t border-white/10 pt-6">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-microphone-lines text-nmixx-sky"></i>
+                            <span class="text-xs text-slate-200">100% Live 全開麥高強度編舞舞臺</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-wand-magic-sparkles text-nmixx-sky"></i>
+                            <span class="text-xs text-slate-200">專屬 NSWER 互動環節與驚喜改編曲</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：場次時間表 -->
+                <div class="lg:col-span-7 bg-nmixx-mist rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm">
+                    <h4 class="font-display font-bold text-lg text-nmixx-navy mb-4 flex items-center justify-between">
+                        <span>TOUR SCHEDULE</span>
+                        <span class="text-xs text-slate-400 font-sans">Cities & Venues</span>
+                    </h4>
+
+                    <div class="space-y-4">
+                        <!-- 場次 1 -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 hover:border-sky-200 transition-colors gap-3">
+                            <div>
+                                <span class="text-xs font-bold text-nmixx-skyDark">SEOUL</span>
+                                <h5 class="font-bold text-nmixx-navy">Jangchung Arena</h5>
+                                <p class="text-xs text-slate-400">Fan Concert 'STICK OUT'</p>
+                            </div>
+                            <div class="flex items-center justify-between sm:justify-end gap-4">
+                                <span class="text-xs font-medium text-slate-500">2024.10</span>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200">SOLD OUT</span>
+                            </div>
+                        </div>
+
+                        <!-- 場次 2 -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 hover:border-sky-200 transition-colors gap-3">
+                            <div>
+                                <span class="text-xs font-bold text-nmixx-skyDark">TAIPEI</span>
+                                <h5 class="font-bold text-nmixx-navy">TICC / NTSU Arena</h5>
+                                <p class="text-xs text-slate-400">NICE TO MIXX YOU SHOWCASE</p>
+                            </div>
+                            <div class="flex items-center justify-between sm:justify-end gap-4">
+                                <span class="text-xs font-medium text-slate-500">2023 - 2024</span>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-200">COMPLETED</span>
+                            </div>
+                        </div>
+
+                        <!-- 場次 3 -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 hover:border-sky-200 transition-colors gap-3">
+                            <div>
+                                <span class="text-xs font-bold text-nmixx-skyDark">LOS ANGELES</span>
+                                <h5 class="font-bold text-nmixx-navy">The Wiltern</h5>
+                                <p class="text-xs text-slate-400">USA Showcase Tour</p>
+                            </div>
+                            <div class="flex items-center justify-between sm:justify-end gap-4">
+                                <span class="text-xs font-medium text-slate-500">North America</span>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-200">COMPLETED</span>
+                            </div>
+                        </div>
+
+                        <!-- 場次 4 -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 hover:border-sky-200 transition-colors gap-3">
+                            <div>
+                                <span class="text-xs font-bold text-nmixx-skyDark">TOKYO</span>
+                                <h5 class="font-bold text-nmixx-navy">Ariake Arena</h5>
+                                <p class="text-xs text-slate-400">Special Stage & Showcase</p>
+                            </div>
+                            <div class="flex items-center justify-between sm:justify-end gap-4">
+                                <span class="text-xs font-medium text-slate-500">Asia Leg</span>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200">COMPLETED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 6. 頁尾 (Minimal Footer) -->
+    <footer class="bg-nmixx-navy text-white py-14 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+                <span class="font-display font-extrabold text-2xl tracking-widest">NMIXX</span>
+                <p class="text-xs text-slate-400 mt-1">SQU4D • JYP Entertainment Official Tribute Page</p>
+            </div>
+
+            <!-- 官方社群連結 -->
+            <div class="flex items-center gap-5 text-lg">
+                <a href="https://twitter.com/NMIXX_official" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-nmixx-sky hover:text-nmixx-navy transition-all"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://www.instagram.com/nmixx_official?utm_source=ig_web_button_share_sheet&vrfl=ZDNlZDc0MzIxNw==" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-nmixx-sky hover:text-nmixx-navy transition-all"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@NMIXXOfficial" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-nmixx-sky hover:text-nmixx-navy transition-all"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://open.spotify.com/artist/28ot3wh4oNmoFOdVajibBl?si=FwfqA5NATOmXpX6934p5yw" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-nmixx-sky hover:text-nmixx-navy transition-all"><i class="fa-brands fa-spotify"></i></a>
+            </div>
+            
+            <p class="text-xs text-slate-500 text-center md:text-right">
+                Designed with Pure White & Sky Blue.<br>© 2026 NSWER All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- 通用詳細資料彈出視窗 (Modal for Members & Albums) -->
+    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl border border-sky-100 max-h-[90vh] overflow-y-auto">
+            <button id="closeModalBtn" class="absolute top-5 right-5 text-slate-400 hover:text-nmixx-navy text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modalContent">
+                <!-- 內容動態填充 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 資料與互動邏輯 -->
+    <script>
+        // 1. 成員資料清單
+        const membersData = [
+            {
+                name: "LILY",
+                chineseName: "朴珍",
+                categories: ["vocal"],
+                role: "主唱 (Main Vocalist)",
+                birthday: "2002.10.17",
+                nationality: "澳洲 / 韓國",
+                vibe: "靈魂高音、天賦歌姬、自信陽光",
+                image: "莉.jpg",
+                desc: "隊內的大姐與大主唱，擁有極其穿透力與歐美靈魂感的音色，在各大 Live 節目中的無伴奏清唱屢次驚豔全網。"
+            },
+            {
+                name: "HAEWON",
+                chineseName: "吳海嫄",
+                categories: ["vocal"],
+                role: "隊長、主唱 (Leader, Lead Vocalist)",
+                birthday: "2003.02.25",
+                nationality: "韓國",
+                vibe: "溫潤清透音色、綜藝天才、領導擔當",
+                image: "嫄.jpg",
+                desc: "NMIXX 的可靠隊長兼發言擔當。音色純淨且技巧穩定，同時具備出類拔萃的綜藝幽默感，是團體的靈魂支柱。"
+            },
+            {
+                name: "SULLYOON",
+                chineseName: "薛侖娥",
+                categories: ["vocal", "dance"],
+                role: "主唱、領舞、門面 (Vocal, Dance, Visual)",
+                birthday: "2004.01.26",
+                nationality: "韓國",
+                vibe: "精緻精靈神顏、反轉渾厚中低音",
+                image: "薛.jpg",
+                desc: "被譽為第四代女團頂級神顏之一，同時擁有令人驚豔的實力派聲線與乾淨俐落的舞蹈線條，打破傳統門面刻板印象。"
+            },
+            {
+                name: "BAE",
+                chineseName: "裴真率",
+                categories: ["vocal", "dance"],
+                role: "主唱、領舞 (Vocalist, Dancer)",
+                birthday: "2004.12.28",
+                nationality: "韓國",
+                vibe: "迷人中低音、氛圍感短髮、四次元幽默",
+                image: "裴.jpg",
+                desc: "標誌性的冷酷帥氣短髮外表下擁有無比搞怪的四次元個性。嗓音低沉富有磁性，是 NMIXX 歌曲裡不可或缺的低音錨點。"
+            },
+            {
+                name: "JIWOO",
+                chineseName: "金智佑",
+                categories: ["dance", "rap"],
+                role: "主舞、饒舌、副唱 (Main Dancer, Rapper)",
+                birthday: "2005.04.13",
+                nationality: "韓國",
+                vibe: "力量感舞蹈、俐落 Rap、小狗相魅力",
+                image: "佑.jpg",
+                desc: "舞蹈爆發力與核心力量極強，律動感十足。同時擔當主要的 Rap 段落，在舞台上能切換可愛與帥氣的反差氛圍。"
+            },
+            {
+                name: "KYUJIN",
+                chineseName: "張圭珍",
+                categories: ["dance", "rap", "vocal"],
+                role: "主舞、饒舌、忙內 (Main Dancer, Rapper, Maknae)",
+                birthday: "2006.05.26",
+                nationality: "韓國",
+                vibe: "全能老么、貓系神采、舞台表情匠人",
+                image: "圭.jpg",
+                desc: "雖然是隊中年紀最小的成員，卻擁有極具壓迫感的舞臺張力與自信神情，唱、跳、Rap 各項全能的標準 ACE 代表。"
+            }
+        ];
+
+        // 2. 專輯資料清單
+        const albumsData = [
+            {
+                title: "AD MARE",
+                type: "single",
+                typeName: "1st Single Album",
+                date: "2022.02.22",
+                titleTrack: "O.O",
+                cover: "AD MARE.jpg",
+                tracks: ["TANK (占 (TANK))", "O.O", "TANK (Inst.)", "O.O (Inst.)"],
+                concept: "出道代表作，向世界宣告邁向大海的冒險之旅，首創 MIXX POP 風格，打破傳統歌曲架構的跨界結合。"
+            },
+            {
+                title: "ENTWURF",
+                type: "single",
+                typeName: "2nd Single Album",
+                date: "2022.09.19",
+                titleTrack: "DICE",
+                cover: "ENTWURF.jpg",
+                tracks: ["DICE", "COOL (Your rainbow)", "DICE (Inst.)", "COOL (Inst.)"],
+                concept: "以冒險擲骰子為概念，面對未知挑戰毫不畏懼，展現更加成熟精準的切換節奏與唱功。"
+            },
+            {
+                title: "expérgo",
+                type: "mini",
+                typeName: "1st EP / Mini Album",
+                date: "2023.03.20",
+                titleTrack: "Love Me Like This",
+                cover: "expérgo.jpg",
+                tracks: ["Young, Dumb, Stupid", "Love Me Like This", "PAXXWORD", "Just Did It", "My Gosh", "HOME"],
+                concept: "拉丁律動與 R&B 的完美相融，帶來令人上癮的洗腦旋律，奠定大眾性與流行度的口碑之作。"
+            },
+            {
+                title: "A Midsummer NMIXX's Dream",
+                type: "single",
+                typeName: "3rd Single Album",
+                date: "2023.07.11",
+                titleTrack: "Party O'Clock",
+                cover: "A Midsummer NMIXX’s Dream.jpg",
+                tracks: ["Party O'Clock", "Roller Coaster", "Party O'Clock (Inst.)", "Roller Coaster (Inst.)"],
+                concept: "以莎士比亞《仲夏夜之夢》為靈感概念，描繪成員們在夏夜森林中開展的神秘狂歡慶典，主打清爽活力夏日 MIXX POP 風格。"
+            },
+            {
+                title: "Fe3O4: BREAK",
+                type: "mini",
+                typeName: "2nd EP / Mini Album",
+                date: "2024.01.15",
+                titleTrack: "DASH",
+                cover: "Fe3O4 BREAK.jpg",
+                tracks: ["DASH", "Soñar (Breaker)", "Run For Roses", "BOOM", "Passionfruit", "XOXO", "Break The Wall"],
+                concept: "融合 Old School Hip-hop 與現代流行，以磁性金屬元素打破禁錮，横掃各大音樂打歌節目一位。"
+            },
+            {
+                title: "Fe3O4: STICK OUT",
+                type: "mini",
+                typeName: "3rd EP / Mini Album",
+                date: "2024.08.19",
+                titleTrack: "See that?",
+                cover: "Fe3O4 STICK OUT.jpg",
+                tracks: ["See that? (별별별)", "SICKUHH (feat. Kid Milli)", "Red light sign, but we go", "BEAT BEAT", "Moving On", "Love Is Lonely"],
+                concept: "結合神秘氛圍與俐落打擊樂，自信詮釋不願被定義的獨特性，展現更具深度的藝術審美。"
+            },
+            {
+                title: "Fe3O4: FORWARD",
+                type: "mini",
+                typeName: "4th EP / Mini Album",
+                date: "2025.03.17",
+                titleTrack: "KNOW ABOUT ME",
+                cover: "Fe3O4 FORWARD.jpg",
+                tracks: ["High Horse", "KNOW ABOUT ME", "Slingshot, but we go", "Golden Recipe", "Papillon", "Ocean"],
+                concept: "Fe3O4 系列的完結篇章，講述啟程前往 Mixotopia 的堅定決心，融合強烈嘻哈與前衛電音。"
+            },
+            {
+                title: "Blue Valentine",
+                type: "full",
+                typeName: "1st Full Album",
+                date: "2025.10.13",
+                titleTrack: "Blue Valentine",
+                cover: "Blue Valentine.jpg",
+                tracks: ["Blue Valentine", "Spinnin' on It", "Phoenix", "Reality Hurts", "Rico", "Game Face", "Podium", "Crush on You", "Adore U", "Shape of Love", "O.O Part 1 (Baila)", "O.O Part 2 (Superhero)"],
+                concept: "首張正規錄音室專輯，收錄12首曲目，以同名主打《Blue Valentine》展現極具衝擊感的流行音樂美學與多元概念。"
+            },
+             {
+                title: "Heavy Serenade",
+                type: "mini",
+                typeName: "5th EP / Mini Album",
+                date: "2026.05.11",
+                titleTrack: "Heavy Serenade",
+                cover: "Heavy Serenade.jpg",
+                tracks: ["Crescendo", "Heavy Serenade", "IDESERVEIT", "Different Girl", "Superior", "LOUD"],
+                concept: "融合 Trance、Acid 與 Drum & Bass 節奏，展現宏大抒情敘事與冷冽高級的電子舞曲張力。"
+            },
+             {
+                title: "Strange Muse",
+                type: "mini",
+                typeName: "6th EP / Mini Album",
+                date: "2026.10.19",
+                titleTrack: "Birthday Wish (긴소원)",
+                cover: "Strange Muse.jpg",
+                tracks: ["Birthday Wish (긴소원)", "Kerosene", "RudE TaLK", "Sing to the Moon (Lily, Haewon)", "Hot 'n Unbothered (Sullyoon, Bae)", "Papillon Pt. 2 (Jiwoo, Kyujin)"],
+                concept: "收錄主打曲〈Birthday Wish〉及小分隊創作歌曲，以神秘怪誕又優雅的藝術靈感探索 MIXX 宇宙。"
+            },
+            
+        ];
+
+        // 渲染成員卡片
+        const membersGrid = document.getElementById('membersGrid');
+        function renderMembers(filter = 'all') {
+            membersGrid.innerHTML = '';
+            const filtered = filter === 'all' 
+                ? membersData 
+                : membersData.filter(m => m.categories.includes(filter));
+
+            filtered.forEach((member, index) => {
+                const card = document.createElement('div');
+                card.className = "group bg-nmixx-mist rounded-3xl overflow-hidden border border-slate-100 hover:border-sky-200 transition-all duration-300 shadow-sm hover:shadow-xl flex flex-col";
+                card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[4/5] bg-slate-200">
+                        <img 
+                            src="${member.image}" 
+                            alt="${member.name}" 
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            onerror="this.src='https://placehold.co/400x500/ffffff/70b3f5?text=${member.name}'"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                            <span class="text-white text-xs tracking-wider uppercase font-semibold">點擊查看成員檔案與介紹 →</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between bg-white">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-nmixx-skyDark tracking-wider uppercase">${member.role.split('(')[0]}</span>
+                                <span class="text-xs text-slate-400">${member.birthday}</span>
+                            </div>
+                            <h3 class="font-display font-bold text-2xl text-nmixx-navy mt-1">${member.name} <span class="text-xs font-normal text-slate-400 font-sans">(${member.chineseName})</span></h3>
+                            <p class="text-xs text-slate-500 mt-2 line-clamp-2">${member.vibe}</p>
+                        </div>
+                        <button onclick="openMemberModal(${index})" class="mt-4 w-full py-2.5 rounded-full border border-slate-200 hover:border-nmixx-sky hover:bg-sky-50/50 text-xs font-semibold text-nmixx-navy transition-all">
+                            了解更多 / PROFILE
+                        </button>
+                    </div>
+                `;
+                membersGrid.appendChild(card);
+            });
+        }
+
+        // 渲染專輯卡片
+        const albumGrid = document.getElementById('albumGrid');
+        function renderAlbums(filter = 'all') {
+            albumGrid.innerHTML = '';
+            const filtered = filter === 'all' 
+                ? albumsData 
+                : albumsData.filter(a => a.type === filter);
+
+            filtered.forEach((album, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative rounded-xl overflow-hidden aspect-square mb-4 bg-slate-100 group">
+                            <img 
+                                src="${album.cover}" 
+                                alt="${album.title}" 
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                onerror="this.src='https://placehold.co/400x400/ffffff/70b3f5?text=${album.title}'"
+                            >
+                            <div class="absolute top-3 left-3">
+                                <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded bg-white/90 backdrop-blur-sm text-nmixx-navy shadow-sm">${album.typeName}</span>
+                            </div>
+                        </div>
+                        <span class="text-xs text-slate-400 font-medium">${album.date}</span>
+                        <h4 class="font-display font-bold text-lg text-nmixx-navy mt-0.5">${album.title}</h4>
+                        <p class="text-xs text-nmixx-skyDark font-semibold mt-1">主打歌：${album.titleTrack}</p>
+                    </div>
+                    <button onclick="openAlbumModal(${idx})" class="mt-4 w-full py-2 rounded-xl bg-nmixx-mist hover:bg-nmixx-skyLight text-nmixx-navy hover:text-nmixx-skyDark text-xs font-semibold transition-colors flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-list-ul text-[10px]"></i> 收錄曲目與概念
+                    </button>
+                `;
+                albumGrid.appendChild(card);
+            });
+        }
+
+        // 成員分類切換事件
+        document.querySelectorAll('.member-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.member-filter-btn').forEach(b => {
+                    b.classList.remove('bg-nmixx-navy', 'text-white');
+                    b.classList.add('bg-slate-100', 'text-slate-600');
+                });
+                btn.classList.add('bg-nmixx-navy', 'text-white');
+                btn.classList.remove('bg-slate-100', 'text-slate-600');
+                renderMembers(btn.dataset.filter);
+            });
+        });
+
+        // 專輯分類切換事件
+        document.querySelectorAll('.album-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.album-filter-btn').forEach(b => {
+                    b.classList.remove('bg-nmixx-skyDark', 'text-white');
+                    b.classList.add('text-slate-600');
+                });
+                btn.classList.add('bg-nmixx-skyDark', 'text-white');
+                btn.classList.remove('text-slate-600');
+                renderAlbums(btn.dataset.type);
+            });
+        });
+
+        // Modal 彈窗控制
+        const modal = document.getElementById('detailModal');
+        const modalContent = document.getElementById('modalContent');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        function openMemberModal(index) {
+            const m = membersData[index];
+            modalContent.innerHTML = `
+                <div class="text-center sm:text-left">
+                    <span class="text-xs uppercase tracking-widest text-nmixx-skyDark font-bold">${m.role}</span>
+                    <h3 class="text-3xl font-display font-extrabold text-nmixx-navy mt-1">${m.name}</h3>
+                    <p class="text-xs text-slate-400">${m.chineseName} • ${m.birthday} • 國籍：${m.nationality}</p>
+                    
+                    <div class="my-5 p-4 rounded-2xl bg-nmixx-skyLight/50 border border-sky-100">
+                        <span class="text-xs font-bold text-nmixx-skyDark uppercase">Signature Charm</span>
+                        <p class="text-xs text-slate-700 mt-1">${m.vibe}</p>
+                    </div>
+
+                    <p class="text-slate-600 text-sm leading-relaxed">${m.desc}</p>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function openAlbumModal(index) {
+            const a = albumsData[index];
+            const trackListHtml = a.tracks.map((t, i) => `
+                <li class="flex items-center justify-between text-xs py-1.5 border-b border-slate-100 last:border-none">
+                    <span class="text-slate-400 font-mono text-[11px]">${String(i + 1).padStart(2, '0')}</span>
+                    <span class="font-medium text-slate-700 ${t === a.titleTrack ? 'font-bold text-nmixx-skyDark' : ''}">${t}</span>
+                    ${t === a.titleTrack ? '<span class="text-[9px] px-2 py-0.5 rounded bg-sky-100 text-nmixx-skyDark font-bold">TITLE</span>' : ''}
+                </li>
+            `).join('');
+
+            modalContent.innerHTML = `
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-nmixx-skyDark font-bold">${a.typeName}</span>
+                    <h3 class="text-2xl font-display font-extrabold text-nmixx-navy mt-0.5">${a.title}</h3>
+                    <p class="text-xs text-slate-400 mb-4">發行日期：${a.date}</p>
+
+                    <div class="mb-4">
+                        <h5 class="text-xs font-bold text-nmixx-navy uppercase tracking-wider mb-2">概念簡介 (Concept)</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">${a.concept}</p>
+                    </div>
+
+                    <div>
+                        <h5 class="text-xs font-bold text-nmixx-navy uppercase tracking-wider mb-2">收錄曲目 (Tracklist)</h5>
+                        <ul class="space-y-1 bg-white border border-slate-100 rounded-xl p-3">
+                            ${trackListHtml}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.add('hidden');
+        });
+
+        // 手機漢堡選單切換
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 滾動自動關閉手機選單
+        window.addEventListener('scroll', () => {
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // 初始化載入
+        renderMembers();
+        renderAlbums();
+    </script>
 </body>
 </html>
